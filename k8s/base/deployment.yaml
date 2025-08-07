@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: bot
-          image: registry.edwardnafornita.com/schedule-bot:latest
+          image: registry.edwardnafornita.com/discord-bot:latest
           env:
             - name: DISCORD_TOKEN
               valueFrom:
