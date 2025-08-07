@@ -24,7 +24,7 @@ export async function handleConfirmation(interaction: ButtonInteraction) {
     scheduledEndTime: endTime,
     privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
     entityType: GuildScheduledEventEntityType.External,
-    description: `League of Legends ${type === 'match' ? 'Match Day' : 'Scrim'} vs ${opponent}`,
+    description: `The Poro Professors ${type === 'match' ? 'Match Day' : 'Scrim'} vs ${opponent}`,
     entityMetadata: {
       location: 'Discord Voice or TBD',
     },
