@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-bot
+  namespace: bots
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schedule-bot
+  template:
+    metadata:
+      labels:
+        app: schedule-bot
+    spec:
+      containers:
+        - name: bot
+          image: registry.edwardnafornita.com/schedule-bot:latest
+          env:
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: schedule-bot-secrets
+                  key: DISCORD_TOKEN
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: schedule-bot-secrets
+                  key: CLIENT_ID
+            - name: GUILD_ID
+              valueFrom:
+                secretKeyRef:
+                  name: schedule-bot-secrets
+                  key: GUILD_ID

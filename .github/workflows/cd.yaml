@@ -1,0 +1,49 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+run-name: CI for ${{ github.event.pull_request.head.ref || github.ref_name }} ${{ github.event.pull_request.number && 'PR#' }}${{ github.event.pull_request.number || '' }}
+
+jobs:
+  build-image:
+    uses: NafornitaProjects/GitHub-Actions/.github/workflows/build-docker-image.yaml@main
+    with:
+      app_name: discord-bot
+      dockerfile: Dockerfile
+      context: .
+    secrets:
+      REGISTRY: ${{ secrets.REGISTRY }}
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-image
+    runs-on: self-hosted
+    steps:
+      - name: Login to Argo CD
+        uses: clowdhaus/argo-cd-action@main
+        with:
+          version: "2.6.7"
+          command: login
+          options: |
+            ${{ secrets.ARGOCD_SERVER }}
+            --username ${{ secrets.ARGOCD_USERNAME }}
+            --password ${{ secrets.ARGOCD_PASSWORD }}
+            --grpc-web
+            --insecure
+      - name: Sync bot in Argo CD
+        uses: clowdhaus/argo-cd-action@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_USERNAME: ${{ secrets.ARGOCD_USERNAME }}
+          ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
+        with:
+          version: "2.6.7"
+          command: "app sync discord-bot"
+          options: "--grpc-web --insecure"
