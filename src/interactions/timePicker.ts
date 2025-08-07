@@ -1,8 +1,5 @@
 import {
   StringSelectMenuInteraction,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
   ActionRowBuilder,
   StringSelectMenuOptionBuilder,
   StringSelectMenuBuilder,
