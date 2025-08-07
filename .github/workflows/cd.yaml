@@ -12,6 +12,7 @@ run-name: CI for ${{ github.event.pull_request.head.ref || github.ref_name }} ${
 
 jobs:
   build-image:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: NafornitaProjects/GitHub-Actions/.github/workflows/build-docker-image.yaml@main
     with:
       app_name: discord-bot
