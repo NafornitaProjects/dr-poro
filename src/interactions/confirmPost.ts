@@ -19,7 +19,7 @@ export async function handleConfirmation(interaction: ButtonInteraction) {
   const endTime = new Date(startTime.getTime() + 3 * 60 * 60 * 1000); // 3 hours
 
   const event = await interaction.guild?.scheduledEvents.create({
-    name: `${type === 'match' ? 'Match Day' : 'Scrim'} vs ${opponent}`,
+    name: `${type === 'matchday' ? 'Match Day' : 'Scrim'} vs ${opponent}`,
     scheduledStartTime: startTime,
     scheduledEndTime: endTime,
     privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,

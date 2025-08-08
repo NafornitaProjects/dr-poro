@@ -23,7 +23,7 @@ export async function handleDateSelection(interaction: StringSelectMenuInteracti
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(timeMenu);
 
     await interaction.update({
-      content: `✅ Date: **${selectedDate}**\n\n⏰ Now choose a time:`,
+      content: `✅ Date: **${selectedDate}**\n\n⏰ Now choose a time:\n(Don't worry, you'll be able to specify minutes after)`,
       components: [row],
     });
   } catch (error) {
