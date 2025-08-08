@@ -15,7 +15,7 @@ export async function handleTimeSelection(interaction: StringSelectMenuInteracti
   });
 
   const timeMenu = new StringSelectMenuBuilder()
-    .setCustomId(`select-time|${hour}|${type}`)
+    .setCustomId(`select-half-hour|${date}|${hour}|${type}`)
     .setPlaceholder(`Pick a time`)
     .addOptions(minuteOptions);
 
