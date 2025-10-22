@@ -5,6 +5,7 @@ WORKDIR /source
 COPY *.sln .
 COPY Dr-Poro/ ./Dr-Poro/
 
+
 RUN dotnet restore
 
 RUN dotnet publish -c release -o /app --no-restore
