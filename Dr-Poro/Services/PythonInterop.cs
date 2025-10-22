@@ -14,7 +14,7 @@ public class PythonInterop : IPythonInterop
         try
         {
             string pythonScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "python_scripts", "generate_availability_image.py");
-            string outputImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "/app/data/availability.png");
+            string outputImagePath = "/app/data/availability.png";
             string escapedJson = availabilityJson.Replace("\"", "\\\"");
 
             Directory.CreateDirectory(Path.GetDirectoryName(outputImagePath)!);
