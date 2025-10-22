@@ -14,11 +14,11 @@ public class PythonInterop : IPythonInterop
         try
         {
             string pythonScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "python_scripts", "generate_availability_image.py");
-            string outputImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "availability.png");
+            string outputImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "/data/availability.png");
             string escapedJson = availabilityJson.Replace("\"", "\\\"");
-            
+
             Directory.CreateDirectory(Path.GetDirectoryName(outputImagePath)!);
-            
+
             if (!File.Exists(pythonScriptPath))
             {
                 Console.WriteLine($"ERROR: Python script not found at {pythonScriptPath}");
@@ -34,13 +34,13 @@ public class PythonInterop : IPythonInterop
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            
+
             using (Process? process = Process.Start(processInfo))
             {
                 string error = await process.StandardError.ReadToEndAsync();
-                
+
                 await process.WaitForExitAsync();
-                
+
                 if (process.ExitCode != 0)
                 {
                     Console.WriteLine($"Python script error: {error}");
@@ -52,7 +52,7 @@ public class PythonInterop : IPythonInterop
                     Console.WriteLine($"File Does Not Exist: {outputImagePath}");
                     return null;
                 }
-            
+
                 Console.WriteLine($"Image generated successfully: {outputImagePath}");
                 return outputImagePath;
             }
