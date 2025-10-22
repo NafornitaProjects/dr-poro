@@ -5,7 +5,6 @@ WORKDIR /source
 COPY *.sln .
 COPY Dr-Poro/ ./Dr-Poro/
 
-
 RUN dotnet restore
 
 RUN dotnet publish -c release -o /app --no-restore
@@ -32,6 +31,6 @@ COPY --from=pydeps /opt/pyenv /opt/pyenv
 ENV PYTHONNET_PYDLL=/usr/lib/x86_64-linux-gnu/libpython3.11.so
 ENV VIRTUAL_ENV="/opt/pyenv"
 ENV PATH="/opt/pyenv/bin:${PATH}"
-ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
 
 ENTRYPOINT ["dotnet", "Dr-Poro.dll"]
