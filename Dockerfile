@@ -1,22 +1,16 @@
-FROM node:20-slim AS builder
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+WORKDIR /source
+
+COPY *.sln .
+COPY Dr-Poro/ ./Dr-Poro/
+RUN dotnet restore
+
+RUN dotnet publish -c release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-
-COPY tsconfig.json ./
-COPY src ./src
-
-RUN npm run build
-
-FROM node:20-slim
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install --omit=dev
-
-COPY --from=builder /app/dist ./dist
-
-CMD ["node", "dist/index.js"]
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "Dr-Poro.dll"]
