@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: schedule-bot
   namespace: bots
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   replicas: 1
   selector:
@@ -32,3 +34,10 @@ spec:
                 secretKeyRef:
                   name: schedule-bot-secrets
                   key: GUILD_ID
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: schedule-bot-data
