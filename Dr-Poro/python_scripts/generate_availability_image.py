@@ -73,4 +73,4 @@ if __name__ == '__main__':
     output_path = sys.argv[1]
     availability_json = sys.argv[2]
 
-    generate_availability_image('./availability_heatmap.png', availability_json)
+    generate_availability_image(output_path, availability_json)
