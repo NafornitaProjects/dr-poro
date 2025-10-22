@@ -17,7 +17,7 @@ WORKDIR /python
 
 COPY Dr-Poro/requirements.txt .
 
-RUN /usr/bin/python3.11 -m venv /opt/pyenv && /opt/pyenv/bin/pip install --upgrade pip && /opt/pyenv/bin/pip install -r requirements.txt
+RUN /usr/bin/python3.11 -m venv /opt/pyenv && /opt/pyenv/bin/pip install --upgrade pip && /opt/pyenv/bin/pip install --no-cache-dir -r requirements.txt
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
