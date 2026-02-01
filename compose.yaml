@@ -1,0 +1,7 @@
+﻿services:
+  drporo:
+    image: drporo
+    build:
+      context: .
+      dockerfile: Dockerfile
+
