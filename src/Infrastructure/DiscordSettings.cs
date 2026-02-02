@@ -7,4 +7,6 @@ public class DiscordSettings
     public ulong ClientId { get; set; }
     
     public ulong GuildId { get; set; }
+
+    public string WebHook { get; set; } = string.Empty;
 }

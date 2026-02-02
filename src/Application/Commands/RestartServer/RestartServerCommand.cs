@@ -4,4 +4,5 @@ namespace DrPoro.Application.Commands.RestartServer;
 /// Command to restart a named game server.
 /// </summary>
 /// <param name="ServerName"></param>
-public record RestartServerCommand(string ServerName) : IRequest<string>;
+/// <param name="WebHookUrl"></param>
+public record RestartServerCommand(string ServerName, string WebHookUrl) : IRequest<string>;

@@ -11,10 +11,6 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Load .env into the environment so IConfiguration can read it.
-        // The .env file is expected in the working directory (project root).
-        Env.Load();
-
         // Reload the configuration so it picks up the variables just loaded from .env.
         if (configuration is IConfigurationRoot root)
         {
@@ -24,6 +20,7 @@ public static class DependencyInjection
         // Bind the "Discord" section -> DiscordSettings and register with IOptions<>.
         services.Configure<DiscordSettings>(configuration.GetSection("Discord"));
 
+        Console.WriteLine(configuration.GetSection("Discord").ToString());
         return services;
     }
 }

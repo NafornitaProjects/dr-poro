@@ -1,17 +1,17 @@
 namespace DrPoro.Application.Commands.RestartServer;
 
-public class RestartServerCommandHandler : IRequestHandler<RestartServerCommand, string>
+public class RestartServerCommandHandler(ILogger<RestartServerCommandHandler> logger)
+    : IRequestHandler<RestartServerCommand, string>
 {
-    private readonly ILogger<RestartServerCommandHandler> _logger;
-
-    public RestartServerCommandHandler(ILogger<RestartServerCommandHandler> logger)
-    {
-        _logger = logger;
-    }
+    private static readonly HttpClient Client = new HttpClient();
 
     public async Task<string> Handle(RestartServerCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Restarting the server: {ServerName}.", request.ServerName);
+        logger.LogInformation("Restarting the server: {ServerName}.", request.ServerName);
+
+        HttpResponseMessage response = await Client.PostAsync(request.WebHookUrl,  new StringContent(request.ServerName), cancellationToken);
+        
+        response.EnsureSuccessStatusCode();
         
         return $"Restarting the {request.ServerName} server.";
     }

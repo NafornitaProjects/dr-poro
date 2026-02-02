@@ -1,21 +1,27 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
-USER $APP_UID
-WORKDIR /app
-
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["DrPoro.csproj", "./"]
-RUN dotnet restore "DrPoro.csproj"
-COPY . .
-WORKDIR "/src/"
-RUN dotnet build "./DrPoro.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./DrPoro.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+COPY DrPoro.sln .
+COPY Directory.Build.props .
+COPY Directory.Packages.props .
+COPY global.json .
 
-FROM base AS final
+COPY src/Application/Application.csproj src/Application/
+COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure/
+COPY src/Client/Client.csproj src/Client/
+
+RUN dotnet restore DrPoro.sln
+
+COPY src ./src
+
+RUN dotnet publish src/Client/Client.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "DrPoro.dll"]
+
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "Client.dll"]

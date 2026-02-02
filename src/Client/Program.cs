@@ -1,10 +1,12 @@
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using DotNetEnv;
+using Microsoft.Extensions.Logging;
+
 using DrPoro.Application;
 using DrPoro.Client.InteractionModules;
 using DrPoro.Infrastructure;
-using Microsoft.Extensions.Logging;
 
 namespace DrPoro.Client;
 
@@ -12,6 +14,8 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        Env.Load();
+        
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .Build();
@@ -34,7 +38,7 @@ public class Program
         
         services.AddTransient<RestartInteractionModule>();
 
-        using var serviceProvider = services.BuildServiceProvider();
+        await using var serviceProvider = services.BuildServiceProvider();
 
         var client = serviceProvider.GetRequiredService<DiscordSocketClient>();
         var interactionService = serviceProvider.GetRequiredService<InteractionService>();
@@ -48,11 +52,14 @@ public class Program
             var context = new SocketInteractionContext(client, interaction);
             await interactionService.ExecuteCommandAsync(context, serviceProvider);
         };
-        
+
         await client.LoginAsync(TokenType.Bot, settings.BotToken);
         await client.StartAsync();
 
-        await interactionService.RegisterCommandsToGuildAsync(settings.GuildId);
+        client.Ready += async () =>
+        {
+            await interactionService.RegisterCommandsToGuildAsync(settings.GuildId);
+        };
 
         var inviteUrl = $"https://discord.com/api/oauth2/authorize?client_id={settings.ClientId}&scope=applications.commands";
         logger.LogInformation("Discord bot is online. Invite URL: {InviteUrl}", inviteUrl);
