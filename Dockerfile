@@ -24,4 +24,4 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "Client.dll"]
+ENTRYPOINT ["dotnet", "DrPoro.Client.dll"]
