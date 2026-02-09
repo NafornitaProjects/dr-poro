@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 
 namespace DrPoro.Application.Commands.UpdateClient;
 
@@ -23,7 +24,12 @@ public class UpdateClientCommandHandler(ILogger<UpdateClientCommandHandler> logg
 
         Client.DefaultRequestHeaders.ExpectContinue = false;
         
-        HttpResponseMessage response = await Client.PostAsJsonAsync(request.WebHookUrl, body, cancellationToken);
+        StringBuilder sb = new();
+        sb.Append(request.WebHookUrl);
+        sb.Append("/update-client");
+        var url = sb.ToString();
+        
+        HttpResponseMessage response = await Client.PostAsJsonAsync(url, body, cancellationToken);
         
         response.EnsureSuccessStatusCode();
         

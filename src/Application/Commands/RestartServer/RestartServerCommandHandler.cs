@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 
 namespace DrPoro.Application.Commands.RestartServer;
 
@@ -22,8 +23,13 @@ public class RestartServerCommandHandler(ILogger<RestartServerCommandHandler> lo
         };
 
         Client.DefaultRequestHeaders.ExpectContinue = false;
+
+        StringBuilder sb = new();
+        sb.Append(request.WebHookUrl);
+        sb.Append("/reboot");
+        var url = sb.ToString();
         
-        HttpResponseMessage response = await Client.PostAsJsonAsync(request.WebHookUrl, body, cancellationToken);
+        HttpResponseMessage response = await Client.PostAsJsonAsync(url, body, cancellationToken);
         
         response.EnsureSuccessStatusCode();
         
