@@ -37,6 +37,7 @@ public class Program
         services.AddSingleton<InteractionService>();
         
         services.AddTransient<RestartInteractionModule>();
+        services.AddTransient<UpdateClientInteractionModule>();
 
         await using var serviceProvider = services.BuildServiceProvider();
 
