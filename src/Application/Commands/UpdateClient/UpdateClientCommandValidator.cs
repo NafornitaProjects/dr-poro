@@ -8,9 +8,9 @@ public class UpdateClientCommandValidator : AbstractValidator<UpdateClientComman
     {
         RuleFor(x => x.ClientName)
             .NotEmpty()
-            .WithMessage("Server name must not be empty.")
+            .WithMessage("Client name must not be empty.")
             .MaximumLength(64)
-            .WithMessage("Server name must not exceed 64 characters.");
+            .WithMessage("Client name must not exceed 64 characters.");
 
         RuleFor(x => x.WebHookUrl)
             .NotEmpty()
